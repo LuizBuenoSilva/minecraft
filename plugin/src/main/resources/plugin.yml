@@ -1,28 +1,66 @@
 name: AmigosSMP
-version: 1.1.0
+version: 1.1.1
 main: br.com.amigossmp.AmigosSMPPlugin
 api-version: '1.21'
 author: AmigosSMP
 description: Recursos exclusivos para o servidor Amigos SMP Survival+.
+
 commands:
-  amigos: {description: Abre o menu principal do servidor, usage: /amigos}
-  tpa: {description: Solicita teleporte até outro jogador, usage: /tpa <jogador>}
-  tpaccept: {description: Aceita um pedido de teleporte, usage: /tpaccept}
-  tpdeny: {description: Recusa um pedido de teleporte, usage: /tpdeny}
-  sethome: {description: Cria uma home, usage: /sethome [nome]}
-  home: {description: Teleporta para uma home, usage: /home [nome]}
-  delhome: {description: Remove uma home, usage: /delhome [nome]}
-  spawn: {description: Teleporta ao spawn, usage: /spawn}
-  setspawn: {description: Define o spawn do servidor, usage: /setspawn}
-  rtp: {description: Teleporta para uma região aleatória segura, usage: /rtp}
-  perfil: {description: Mostra o perfil no servidor, usage: /perfil [jogador]}
-  moedas: {description: Mostra suas moedas, usage: /moedas}
-  party: {description: Sistema de grupo entre amigos, usage: /party <create|invite|accept|leave|list|chat>}
-  missoes: {description: Mostra as missões diárias, usage: /missoes}
-  profissao: {description: Sistema de profissões, usage: /profissao [escolher <profissao>]}
-  boss: {description: Mostra bosses ativos ou invoca boss para teste, usage: /boss [summon]}
-  evento: {description: Mostra o evento ativo ou inicia um evento, usage: /evento [iniciar <tipo>]}
-  itens: {description: Mostra os itens especiais do servidor, usage: /itens}
+  amigos:
+    description: Abre o menu principal do servidor
+    usage: "/amigos"
+  tpa:
+    description: Solicita teleporte até outro jogador
+    usage: "/tpa <jogador>"
+  tpaccept:
+    description: Aceita um pedido de teleporte
+    usage: "/tpaccept"
+  tpdeny:
+    description: Recusa um pedido de teleporte
+    usage: "/tpdeny"
+  sethome:
+    description: Cria uma home
+    usage: "/sethome [nome]"
+  home:
+    description: Teleporta para uma home
+    usage: "/home [nome]"
+  delhome:
+    description: Remove uma home
+    usage: "/delhome [nome]"
+  spawn:
+    description: Teleporta ao spawn
+    usage: "/spawn"
+  setspawn:
+    description: Define o spawn do servidor
+    usage: "/setspawn"
+  rtp:
+    description: Teleporta para uma região aleatória segura
+    usage: "/rtp"
+  perfil:
+    description: Mostra o perfil no servidor
+    usage: "/perfil [jogador]"
+  moedas:
+    description: Mostra suas moedas
+    usage: "/moedas"
+  party:
+    description: Sistema de grupo entre amigos
+    usage: "/party <create|invite|accept|leave|list|chat>"
+  missoes:
+    description: Mostra as missões diárias
+    usage: "/missoes"
+  profissao:
+    description: Sistema de profissões
+    usage: "/profissao escolher <profissao>"
+  boss:
+    description: Mostra bosses ativos ou invoca boss para teste
+    usage: "/boss [summon]"
+  evento:
+    description: Mostra o evento ativo ou inicia um evento
+    usage: "/evento [iniciar <tipo>]"
+  itens:
+    description: Mostra os itens especiais do servidor
+    usage: "/itens"
+
 permissions:
   amigossmp.admin:
     default: op
