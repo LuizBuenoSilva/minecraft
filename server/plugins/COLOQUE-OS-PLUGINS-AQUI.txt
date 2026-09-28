@@ -1,0 +1,2 @@
+Depois de compilar, AmigosSMP.jar ficará nesta pasta.
+Plugins complementares recomendados estão em ../../docs/PLUGINS-RECOMENDADOS.md
