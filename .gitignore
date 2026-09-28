@@ -1,0 +1,12 @@
+plugin/target/
+server/world/
+server/world_nether/
+server/world_the_end/
+server/logs/
+server/cache/
+server/libraries/
+server/versions/
+server/plugins/*.jar
+server/purpur.jar
+*.log
+.DS_Store
