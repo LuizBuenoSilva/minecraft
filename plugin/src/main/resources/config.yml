@@ -1,0 +1,24 @@
+server-name: "Amigos SMP"
+teleport:
+  request-expire-seconds: 60
+  warmup-seconds: 3
+rtp:
+  min-radius: 500
+  max-radius: 5000
+  cooldown-seconds: 120
+  attempts: 40
+homes:
+  default-limit: 3
+coins:
+  hostile-mob-kill: 2
+  boss-kill: 100
+boss:
+  health: 120.0
+events:
+  interval-minutes: 45
+  duration-minutes: 10
+messages:
+  prefix: "&8[&bAmigosSMP&8] &r"
+  no-permission: "&cVocê não tem permissão para fazer isso."
+  player-only: "&cEste comando só pode ser usado por jogadores."
+  player-not-found: "&cJogador não encontrado."
