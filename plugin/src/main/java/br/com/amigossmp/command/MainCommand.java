@@ -32,7 +32,9 @@ public class MainCommand implements CommandExecutor {
             case "home" -> home(player, args);
             case "delhome" -> delHome(player, args);
             case "spawn" -> spawn(player);
-            case "setspawn" -> setSpawn(player);\n            case "respawn" -> respawn(player);\n            case "backdeath" -> backDeath(player);
+            case "setspawn" -> setSpawn(player);
+            case "respawn" -> respawn(player);
+            case "backdeath" -> backDeath(player);
             case "rtp" -> rtp(player);
             case "perfil" -> profile(player, args);
             case "moedas" -> coins(player);
