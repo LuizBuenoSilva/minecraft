@@ -1,11 +1,23 @@
 name: AmigosSMP
-version: 1.2.0
+version: 1.3.0
 main: br.com.amigossmp.AmigosSMPPlugin
 api-version: '1.21'
 author: AmigosSMP
 description: Recursos exclusivos para o servidor Amigos SMP Survival+.
 
 commands:
+  mapa:
+    description: Abre o mapa e navegador do servidor
+    usage: "/mapa"
+  marcar:
+    description: Salva um marcador na posição atual
+    usage: "/marcar <nome>"
+  desmarcar:
+    description: Remove um marcador salvo
+    usage: "/desmarcar <nome>"
+  rota:
+    description: Inicia uma rota para jogador ou local
+    usage: "/rota <jogador|home|spawn|respawn|death|off> | /rota local <nome>"
   amigos:
     description: Abre o menu principal do servidor
     usage: "/amigos"
