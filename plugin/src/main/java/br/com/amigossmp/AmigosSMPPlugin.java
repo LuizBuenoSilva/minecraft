@@ -31,6 +31,7 @@ public class AmigosSMPPlugin extends JavaPlugin {
     private ItemManager items;
     private BossManager bosses;
     private EventManager events;
+    private NavigatorManager navigator;
     private File locationsFile;
     private YamlConfiguration locations;
 
@@ -47,16 +48,22 @@ public class AmigosSMPPlugin extends JavaPlugin {
         items = new ItemManager();
         bosses = new BossManager(this);
         events = new EventManager(this);
+        navigator = new NavigatorManager(this);
         locationsFile = new File(getDataFolder(), "locations.yml");
         locations = YamlConfiguration.loadConfiguration(locationsFile);
 
         MainCommand executor = new MainCommand(this);
-        for (String command : List.of("amigos","tpa","tpaccept","tpdeny","sethome","home","delhome","spawn","setspawn","respawn","backdeath","rtp","perfil","moedas","party","missoes","profissao","boss","evento","itens")) {
+        for (String command : List.of("amigos","mapa","marcar","desmarcar","rota","tpa","tpaccept","tpdeny","sethome","home","delhome","spawn","setspawn","respawn","backdeath","rtp","perfil","moedas","party","missoes","profissao","boss","evento","itens")) {
             Objects.requireNonNull(getCommand(command)).setExecutor(executor);
         }
         Bukkit.getPluginManager().registerEvents(new GameListener(this), this);
+        if (getConfig().getBoolean("survival.keep-inventory", true)) {
+            for (World world : Bukkit.getWorlds()) {
+                world.setGameRule(org.bukkit.GameRule.KEEP_INVENTORY, true);
+            }
+        }
         events.scheduleRandomEvents();
-        getLogger().info("AmigosSMP 1.2.0 ativado. Survival+ pronto!");
+        getLogger().info("AmigosSMP 1.3.0 ativado. Navegação Survival+ pronta!");
     }
 
     public String prefix() { return getConfig().getString("messages.prefix", "&8[&bAmigosSMP&8] &r"); }
@@ -69,6 +76,7 @@ public class AmigosSMPPlugin extends JavaPlugin {
     public ItemManager items() { return items; }
     public BossManager bosses() { return bosses; }
     public EventManager events() { return events; }
+    public NavigatorManager navigator() { return navigator; }
 
     public void openMainMenu(Player player) {
         Inventory inv = Bukkit.createInventory(null, 27, Texts.color("&0Amigos SMP"));
@@ -81,6 +89,7 @@ public class AmigosSMPPlugin extends JavaPlugin {
         inv.setItem(16, item(Material.IRON_PICKAXE, "&bProfissão", "&7Evolua jogando do seu jeito."));
         inv.setItem(19, item(Material.RECOVERY_COMPASS, "&cÚltima Morte (/backdeath)", "&7Volte ao último local onde morreu."));
         inv.setItem(20, item(Material.RESPAWN_ANCHOR, "&aRespawn (/respawn)", "&7Volte para sua cama ou âncora."));
+        inv.setItem(22, item(Material.FILLED_MAP, "&6Mapa do Explorador (/mapa)", "&7Navegação, rotas e marcadores."));
         player.openInventory(inv);
     }
 
