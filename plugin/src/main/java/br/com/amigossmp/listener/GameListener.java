@@ -33,9 +33,9 @@ public class GameListener implements Listener {
         Player p = event.getPlayer();
         plugin.profiles().setName(p.getUniqueId(), p.getName());
         p.sendMessage(Texts.color("&8&m-----------------------------------------"));
-        p.sendMessage(Texts.color("&b&lAMIGOS SMP &7• &fSurvival+ v1.1"));
+        p.sendMessage(Texts.color("&b&lAMIGOS SMP &7• &fSurvival+ v1.2"));
         p.sendMessage(Texts.color("&7Use &f/amigos &7para abrir o menu principal."));
-        p.sendMessage(Texts.color("&7Novidades: &f/missoes, /profissao, /evento, /boss e /itens"));
+        p.sendMessage(Texts.color("&7TP: &f/tpa <jogador> &8• &7Respawn: &f/respawn &8• &7Última morte: &f/backdeath"));
         p.sendMessage(Texts.color("&8&m-----------------------------------------"));
     }
 
@@ -55,7 +55,10 @@ public class GameListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
-        plugin.profiles().add(event.getEntity().getUniqueId(), "deaths", 1);
+        Player player = event.getEntity();
+        plugin.profiles().add(player.getUniqueId(), "deaths", 1);
+        plugin.setLastDeath(player.getUniqueId(), player.getLocation());
+        player.sendMessage(Texts.color(plugin.prefix() + "&cLocal da morte salvo. Use &f/backdeath &cdepois de renascer."));
     }
 
     @EventHandler
@@ -97,5 +100,7 @@ public class GameListener implements Listener {
         else if (name.contains("Party")) player.performCommand("party list");
         else if (name.contains("Spawn")) player.performCommand("spawn");
         else if (name.contains("Profissão")) player.performCommand("profissao");
+        else if (name.contains("Última Morte")) player.performCommand("backdeath");
+        else if (name.contains("Respawn")) player.performCommand("respawn");
     }
 }
