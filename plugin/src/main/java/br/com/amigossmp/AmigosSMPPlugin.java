@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class AmigosSMPPlugin extends JavaPlugin {
     private HomeManager homes;
@@ -50,12 +51,12 @@ public class AmigosSMPPlugin extends JavaPlugin {
         locations = YamlConfiguration.loadConfiguration(locationsFile);
 
         MainCommand executor = new MainCommand(this);
-        for (String command : List.of("amigos","tpa","tpaccept","tpdeny","sethome","home","delhome","spawn","setspawn","rtp","perfil","moedas","party","missoes","profissao","boss","evento","itens")) {
+        for (String command : List.of("amigos","tpa","tpaccept","tpdeny","sethome","home","delhome","spawn","setspawn","respawn","backdeath","rtp","perfil","moedas","party","missoes","profissao","boss","evento","itens")) {
             Objects.requireNonNull(getCommand(command)).setExecutor(executor);
         }
         Bukkit.getPluginManager().registerEvents(new GameListener(this), this);
         events.scheduleRandomEvents();
-        getLogger().info("AmigosSMP 1.1.0 ativado. Survival+ pronto!");
+        getLogger().info("AmigosSMP 1.2.0 ativado. Survival+ pronto!");
     }
 
     public String prefix() { return getConfig().getString("messages.prefix", "&8[&bAmigosSMP&8] &r"); }
@@ -78,6 +79,8 @@ public class AmigosSMPPlugin extends JavaPlugin {
         inv.setItem(14, item(Material.TOTEM_OF_UNDYING, "&dParty", "&7Veja seu grupo de amigos."));
         inv.setItem(15, item(Material.NETHER_STAR, "&6Spawn", "&7Volte ao ponto central."));
         inv.setItem(16, item(Material.IRON_PICKAXE, "&bProfissão", "&7Evolua jogando do seu jeito."));
+        inv.setItem(19, item(Material.RECOVERY_COMPASS, "&cÚltima Morte (/backdeath)", "&7Volte ao último local onde morreu."));
+        inv.setItem(20, item(Material.RESPAWN_ANCHOR, "&aRespawn (/respawn)", "&7Volte para sua cama ou âncora."));
         player.openInventory(inv);
     }
 
@@ -91,20 +94,47 @@ public class AmigosSMPPlugin extends JavaPlugin {
     }
 
     public void setSpawn(Location loc) {
-        locations.set("spawn.world", loc.getWorld().getName());
-        locations.set("spawn.x", loc.getX());
-        locations.set("spawn.y", loc.getY());
-        locations.set("spawn.z", loc.getZ());
-        locations.set("spawn.yaw", loc.getYaw());
-        locations.set("spawn.pitch", loc.getPitch());
-        try { locations.save(locationsFile); } catch (IOException e) { getLogger().severe(e.getMessage()); }
+        writeLocation("spawn", loc);
     }
 
     public Location getSpawn() {
-        String name = locations.getString("spawn.world");
+        return readLocation("spawn");
+    }
+
+    public void setLastDeath(UUID uuid, Location loc) {
+        writeLocation("last-death." + uuid, loc);
+    }
+
+    public Location getLastDeath(UUID uuid) {
+        return readLocation("last-death." + uuid);
+    }
+
+    private void writeLocation(String path, Location loc) {
+        locations.set(path + ".world", loc.getWorld().getName());
+        locations.set(path + ".x", loc.getX());
+        locations.set(path + ".y", loc.getY());
+        locations.set(path + ".z", loc.getZ());
+        locations.set(path + ".yaw", loc.getYaw());
+        locations.set(path + ".pitch", loc.getPitch());
+        try {
+            locations.save(locationsFile);
+        } catch (IOException e) {
+            getLogger().severe("Não foi possível salvar locations.yml: " + e.getMessage());
+        }
+    }
+
+    private Location readLocation(String path) {
+        String name = locations.getString(path + ".world");
         if (name == null) return null;
         World world = Bukkit.getWorld(name);
         if (world == null) return null;
-        return new Location(world, locations.getDouble("spawn.x"), locations.getDouble("spawn.y"), locations.getDouble("spawn.z"), (float)locations.getDouble("spawn.yaw"), (float)locations.getDouble("spawn.pitch"));
+        return new Location(
+                world,
+                locations.getDouble(path + ".x"),
+                locations.getDouble(path + ".y"),
+                locations.getDouble(path + ".z"),
+                (float) locations.getDouble(path + ".yaw"),
+                (float) locations.getDouble(path + ".pitch")
+        );
     }
 }
