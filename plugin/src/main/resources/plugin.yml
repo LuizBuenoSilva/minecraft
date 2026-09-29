@@ -1,5 +1,5 @@
 name: AmigosSMP
-version: 1.1.1
+version: 1.2.0
 main: br.com.amigossmp.AmigosSMPPlugin
 api-version: '1.21'
 author: AmigosSMP
@@ -33,6 +33,12 @@ commands:
   setspawn:
     description: Define o spawn do servidor
     usage: "/setspawn"
+  respawn:
+    description: Teleporta para sua cama ou âncora de respawn
+    usage: "/respawn"
+  backdeath:
+    description: Teleporta para o local da última morte
+    usage: "/backdeath"
   rtp:
     description: Teleporta para uma região aleatória segura
     usage: "/rtp"
