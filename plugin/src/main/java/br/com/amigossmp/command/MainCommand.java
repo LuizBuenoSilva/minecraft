@@ -32,7 +32,7 @@ public class MainCommand implements CommandExecutor {
             case "home" -> home(player, args);
             case "delhome" -> delHome(player, args);
             case "spawn" -> spawn(player);
-            case "setspawn" -> setSpawn(player);
+            case "setspawn" -> setSpawn(player);\n            case "respawn" -> respawn(player);\n            case "backdeath" -> backDeath(player);
             case "rtp" -> rtp(player);
             case "perfil" -> profile(player, args);
             case "moedas" -> coins(player);
@@ -123,6 +123,29 @@ public class MainCommand implements CommandExecutor {
         if (!player.hasPermission("amigossmp.admin")) { player.sendMessage(c("&cApenas administradores.")); return true; }
         plugin.setSpawn(player.getLocation());
         player.sendMessage(c("&aSpawn definido aqui."));
+        return true;
+    }
+
+    private boolean respawn(Player player) {
+        Location loc = player.getRespawnLocation();
+        if (loc == null) {
+            loc = player.getWorld().getSpawnLocation();
+            player.sendMessage(c("&eVocê não tem cama/âncora definida. Indo para o spawn do mundo."));
+        } else {
+            player.sendMessage(c("&aTeleportando para seu ponto de respawn."));
+        }
+        player.teleportAsync(loc);
+        return true;
+    }
+
+    private boolean backDeath(Player player) {
+        Location loc = plugin.getLastDeath(player.getUniqueId());
+        if (loc == null) {
+            player.sendMessage(c("&cAinda não há uma última morte salva."));
+            return true;
+        }
+        player.teleportAsync(loc);
+        player.sendMessage(c("&cVocê voltou ao local da sua última morte."));
         return true;
     }
 
