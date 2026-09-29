@@ -33,9 +33,9 @@ public class GameListener implements Listener {
         Player p = event.getPlayer();
         plugin.profiles().setName(p.getUniqueId(), p.getName());
         p.sendMessage(Texts.color("&8&m-----------------------------------------"));
-        p.sendMessage(Texts.color("&b&lAMIGOS SMP &7• &fSurvival+ v1.2"));
+        p.sendMessage(Texts.color("&b&lAMIGOS SMP &7• &fSurvival+ v1.3"));
         p.sendMessage(Texts.color("&7Use &f/amigos &7para abrir o menu principal."));
-        p.sendMessage(Texts.color("&7TP: &f/tpa <jogador> &8• &7Respawn: &f/respawn &8• &7Última morte: &f/backdeath"));
+        p.sendMessage(Texts.color("&7Mapa/GPS: &f/mapa &8• &7Rota: &f/rota <destino> &8• &7Marcar: &f/marcar <nome>"));
         p.sendMessage(Texts.color("&8&m-----------------------------------------"));
     }
 
@@ -84,7 +84,9 @@ public class GameListener implements Listener {
 
     @EventHandler
     public void onMenuClick(InventoryClickEvent event) {
-        if (!event.getView().getTitle().equals(Texts.color("&0Amigos SMP"))) return;
+        boolean mainMenu = event.getView().getTitle().equals(Texts.color("&0Amigos SMP"));
+        boolean mapMenu = event.getView().getTitle().equals(Texts.color("&8✦ &6Mapa do Explorador &8✦"));
+        if (!mainMenu && !mapMenu) return;
         event.setCancelled(true);
         if (!(event.getWhoClicked() instanceof Player player)) return;
         ItemStack item = event.getCurrentItem();
@@ -92,6 +94,10 @@ public class GameListener implements Listener {
         ItemMeta meta = item.getItemMeta();
         if (meta == null || !meta.hasDisplayName()) return;
         String name = ChatColor.stripColor(meta.getDisplayName());
+        if (mapMenu) {
+            plugin.navigator().handleMapClick(player, item);
+            return;
+        }
         player.closeInventory();
         if (name.contains("Perfil")) player.performCommand("perfil");
         else if (name.contains("Explorar")) player.performCommand("rtp");
@@ -102,5 +108,6 @@ public class GameListener implements Listener {
         else if (name.contains("Profissão")) player.performCommand("profissao");
         else if (name.contains("Última Morte")) player.performCommand("backdeath");
         else if (name.contains("Respawn")) player.performCommand("respawn");
+        else if (name.contains("Mapa do Explorador")) player.performCommand("mapa");
     }
 }
