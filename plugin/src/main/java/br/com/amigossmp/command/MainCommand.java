@@ -25,6 +25,10 @@ public class MainCommand implements CommandExecutor {
         }
         return switch (command.getName().toLowerCase(Locale.ROOT)) {
             case "amigos" -> { plugin.openMainMenu(player); yield true; }
+            case "mapa" -> { plugin.navigator().openMap(player); yield true; }
+            case "marcar" -> mark(player, args);
+            case "desmarcar" -> unmark(player, args);
+            case "rota" -> route(player, args);
             case "tpa" -> tpa(player, args);
             case "tpaccept" -> tpAccept(player);
             case "tpdeny" -> tpDeny(player);
@@ -46,6 +50,87 @@ public class MainCommand implements CommandExecutor {
             case "itens" -> items(player);
             default -> false;
         };
+    }
+
+    private boolean mark(Player player, String[] args) {
+        if (args.length < 1) {
+            player.sendMessage(c("&eUse: /marcar <nome>"));
+            return true;
+        }
+        String name = args[0];
+        if (plugin.navigator().saveWaypoint(player, name)) {
+            player.sendMessage(c("&aMarcador &f" + name + " &asalvo em sua posição."));
+        } else {
+            player.sendMessage(c("&cNome de marcador inválido."));
+        }
+        return true;
+    }
+
+    private boolean unmark(Player player, String[] args) {
+        if (args.length < 1) {
+            player.sendMessage(c("&eUse: /desmarcar <nome>"));
+            return true;
+        }
+        player.sendMessage(c(plugin.navigator().deleteWaypoint(player, args[0])
+                ? "&aMarcador removido."
+                : "&cMarcador não encontrado."));
+        return true;
+    }
+
+    private boolean route(Player player, String[] args) {
+        if (args.length < 1) {
+            player.sendMessage(c("&e/rota <jogador|home|spawn|respawn|death|off>"));
+            player.sendMessage(c("&e/rota local <nome>"));
+            return true;
+        }
+
+        String target = args[0].toLowerCase(Locale.ROOT);
+        switch (target) {
+            case "off", "parar" -> {
+                player.sendMessage(c(plugin.navigator().stop(player) ? "&7Navegação encerrada." : "&7Nenhuma rota estava ativa."));
+                return true;
+            }
+            case "spawn" -> {
+                Location loc = plugin.getSpawn();
+                if (loc == null) loc = player.getWorld().getSpawnLocation();
+                plugin.navigator().routeToLocation(player, "Spawn", loc);
+                return true;
+            }
+            case "home", "casa" -> {
+                Location loc = plugin.homes().getHome(player.getUniqueId(), "casa");
+                if (loc == null) player.sendMessage(c("&cVocê ainda não salvou a home &fcasa&c. Use /sethome casa."));
+                else plugin.navigator().routeToLocation(player, "Casa", loc);
+                return true;
+            }
+            case "respawn" -> {
+                Location loc = player.getRespawnLocation();
+                if (loc == null) loc = player.getWorld().getSpawnLocation();
+                plugin.navigator().routeToLocation(player, "Respawn", loc);
+                return true;
+            }
+            case "death", "morte" -> {
+                Location loc = plugin.getLastDeath(player.getUniqueId());
+                if (loc == null) player.sendMessage(c("&cAinda não há uma última morte salva."));
+                else plugin.navigator().routeToLocation(player, "Última Morte", loc);
+                return true;
+            }
+            case "local" -> {
+                if (args.length < 2) {
+                    player.sendMessage(c("&eUse: /rota local <nome>"));
+                    return true;
+                }
+                Location loc = plugin.navigator().getWaypoint(player.getUniqueId(), args[1]);
+                if (loc == null) player.sendMessage(c("&cMarcador não encontrado."));
+                else plugin.navigator().routeToLocation(player, args[1], loc);
+                return true;
+            }
+            default -> {
+                Player other = Bukkit.getPlayerExact(args[0]);
+                if (other == null || !other.isOnline()) player.sendMessage(c("&cJogador não encontrado ou offline."));
+                else plugin.navigator().routeToPlayer(player, other);
+                return true;
+            }
+        }
     }
 
     private boolean tpa(Player player, String[] args) {
