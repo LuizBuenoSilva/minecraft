@@ -1,3 +1,9 @@
+survival:
+  keep-inventory: true
+navigation:
+  update-ticks: 20
+  arrival-distance: 6
+
 server-name: "Amigos SMP"
 teleport:
   request-expire-seconds: 60
